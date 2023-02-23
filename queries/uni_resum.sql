@@ -1,0 +1,11 @@
+SELECT COUNT(*) FROM persona WHERE tipo='alumno';
+SELECT COUNT(*) FROM persona WHERE tipo='alumno' AND YEAR(fecha_nacimiento) = 1999;
+SELECT D.nombre, group_concat(P.nombre) AS 'Profesores del Departamento' FROM departamento D RIGHT JOIN profesor PR ON D.id=PR.id_departamento INNER JOIN persona P ON PR.id_profesor = P.id GROUP BY D.nombre ORDER BY D.nombre DESC;
+SELECT DISTINCT D.nombre, COUNT(PR.id_departamento) AS numprofs FROM departamento D LEFT JOIN profesor PR ON PR.id_departamento = D.id GROUP BY D.nombre ORDER BY numprofs DESC;
+SELECT G.nombre, COUNT(A.id_grado) AS numAsignaturas FROM grado G LEFT JOIN asignatura A ON A.id_grado=G.id GROUP BY G.nombre ORDER BY numAsignaturas DESC;
+SELECT G.nombre, COUNT(A.id_grado) AS numAsignaturas FROM grado G LEFT JOIN asignatura A ON A.id_grado=G.id GROUP BY G.nombre HAVING numAsignaturas > 40 ORDER BY numAsignaturas DESC;
+SELECT G.nombre, A.tipo, SUM(creditos) AS numCreditos FROM grado G LEFT JOIN asignatura A On A.id_grado=G.id GROUP BY G.nombre, A.tipo ORDER BY numCreditos DESC;
+SELECT CONCAT(CE.anyo_inicio,'-', CE.anyo_fin) AS 'Curso Escolar', COUNT(DISTINCT ASA.id_alumno) AS 'Alumnos Matriculados' FROM curso_escolar CE INNER JOIN alumno_se_matricula_asignatura ASA GROUP BY CE.id;
+SELECT  P.apellido1, P.apellido2, P.nombre, COUNT(A.id) AS numAsignaturas FROM persona P LEFT JOIN asignatura A ON P.id=A.id_profesor WHERE P.tipo='profesor' GROUP by P.id ORDER BY numAsignaturas DESC;
+SELECT * FROM persona WHERE tipo='alumno' ORDER BY YEAR(fecha_nacimiento) DESC LIMIT 1;
+SELECT P.* FROM persona P INNER JOIN profesor PR ON P.id=PR.id_profesor LEFT JOIN asignatura A ON A.id_profesor=P.id WHERE PR.id_departamento IS NOT NULL AND A.id_profesor IS NULL;
